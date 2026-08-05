@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import MaxValueValidator
 
 class Room(models.Model):
-    pk = models.CompositePrimaryKey("room_number", "order_id")
+    pk = models.CompositePrimaryKey("room_number", "room_floor")
     room_number = models.PositiveIntegerField(default=1,verbose_name='Numer pokoju')
     room_floor = models.PositiveIntegerField(default=0,validators=[MaxValueValidator(2)],verbose_name='Piętro')
     room_name = models.CharField(max_length=150,blank=True,null=True,verbose_name='Nazwa pokoju')
