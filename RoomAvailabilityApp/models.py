@@ -6,6 +6,8 @@ Models: Room
 from django.db import models
 from django.core.validators import MaxValueValidator
 from django.utils.translation import gettext_lazy
+
+
 class Room(models.Model):
     """
     Class to model the Room
@@ -19,28 +21,29 @@ class Room(models.Model):
         creation_date (date): Date of creation
     """
     pk = models.CompositePrimaryKey("room_number", "room_floor")
-    room_number = models.PositiveIntegerField(default=1,verbose_name='Numer pokoju')
+    room_number = models.PositiveIntegerField(default=1,verbose_name=gettext_lazy('Room number'))
 
     room_floor = models.PositiveIntegerField(default=0,
                                              validators=[MaxValueValidator(2)],
-                                             verbose_name='Piętro')
+                                             verbose_name=gettext_lazy('Floor'))
 
     room_name = models.CharField(max_length=150,blank=True,
-                                 null=True,verbose_name='Nazwa pokoju')
+                                 null=True,verbose_name=gettext_lazy('Room name'))
 
     additional_room_info = models.TextField(max_length=3_000,blank=True,
                                             null=True,
-                                            verbose_name='Dodatkowe informacje')
+                                            verbose_name=gettext_lazy('Additional info'))
 
     building_name = models.CharField(max_length=1, blank=True,
-                                     null=True, verbose_name='Nazwa budynku')
+                                     null=True, verbose_name=gettext_lazy('Building name'))
 
-    creation_date = models.DateField(auto_now_add=True)
+    creation_date = models.DateField(auto_now_add=True,verbose_name=gettext_lazy('Date of creation'))
 
     class Meta:
-        verbose_name = "Room"
-        verbose_name_plural = "Rooms"
+        verbose_name = gettext_lazy('Room')
+        verbose_name_plural = gettext_lazy('Rooms')
 
     def __str__(self):
-        return (f"Numer sali: {self.room_number}\nPiętro: {self.room_floor}"
-                f"{"\n Nazwa sali: {self.room_name}" if self.room_name else ""}")
+        return (f"{gettext_lazy('Room number')}: {self.room_number}\n"
+                f"{gettext_lazy('Floor')} {self.room_floor}"
+                f"{f"\n Nazwa sali: {self.room_name}" if self.room_name else ""}")
