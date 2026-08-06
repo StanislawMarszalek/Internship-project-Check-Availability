@@ -21,8 +21,8 @@ class Room(models.Model):
         building_name (str): Name of building where the room is located
         creation_date (date): Date of creation
     """
-    pk = models.CompositePrimaryKey("room_number", "room_floor")
-    room_number = models.PositiveIntegerField(default=1,verbose_name=gettext_lazy('Room number'))
+
+    room_number = models.PositiveIntegerField(primary_key=True,default=1,verbose_name=gettext_lazy('Room number'))
 
     room_floor = models.PositiveIntegerField(default=0,
                                              validators=[MaxValueValidator(2)],
