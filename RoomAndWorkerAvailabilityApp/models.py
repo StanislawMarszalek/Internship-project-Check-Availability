@@ -83,7 +83,7 @@ class Worker(AbstractUser):
         ("Administrator", "Administrator"),
     ]
     department = models.CharField(
-        max_length=10,
+        max_length=25,
         choices=DEPARTMENTS
     )
 
