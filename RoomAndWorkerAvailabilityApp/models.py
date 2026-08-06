@@ -58,6 +58,7 @@ class Worker(AbstractUser):
     """
     Class to model the Worker
     Attributes:
+        username (string): Username
         first_name (string): First name
         last_name (string): Last name
         email (string): Email
