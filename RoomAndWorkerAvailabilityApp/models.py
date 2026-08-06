@@ -1,6 +1,6 @@
 """
 Models for the RoomAndWorkerAvailabilityApp
-Models: Room, Worker
+Models: Room, Worker, Reservvation
 """
 
 from django.db import models
@@ -113,11 +113,28 @@ class Worker(AbstractUser):
         ]
 
 class Reservation(models.Model):
-    room = models.ForeignKey(Room, on_delete=models.CASCADE,verbose_name=gettext_lazy('Room number'))
-    worker = models.ForeignKey(Worker, on_delete=models.CASCADE,verbose_name=gettext_lazy('Reserver id'))
+    """
+    Class to model the Reservation
+    Attributes:
+        room (Room): Room id
+        worker (Worker): Worker id
+        start_of_reservation (date): Date of reservation
+        end_of_reservation (date): Date of the end of reservation
+        description_of_event (string): Description of the event
+        pk (PrimaryKey): Primary key of the reservation
+    """
+    room = models.ForeignKey(Room, on_delete=models.CASCADE,
+                             verbose_name=gettext_lazy('Room number'),related_name="reservations")
+
+    worker = models.ForeignKey(Worker, on_delete=models.CASCADE,
+                               verbose_name=gettext_lazy('Reserver id'),related_name="reservations")
+
     start_of_reservation = models.DateField(verbose_name=gettext_lazy('Start of the reservation'))
+
     end_of_reservation = models.DateField(verbose_name=gettext_lazy('End of the reservation'))
-    description_of_event = models.TextField(max_length=1500, blank=True,null=True,verbose_name=gettext_lazy('Description of event'))
+
+    description_of_event = models.TextField(max_length=1500, blank=True,null=True,
+                                            verbose_name=gettext_lazy('Description of event'))
 
     pk = models.CompositePrimaryKey("worker", "room","start_of_reservation", "end_of_reservation")
 
