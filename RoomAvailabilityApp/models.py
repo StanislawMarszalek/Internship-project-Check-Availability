@@ -4,6 +4,7 @@ Models: Room
 """
 
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator
 from django.utils.translation import gettext_lazy
 
@@ -47,3 +48,30 @@ class Room(models.Model):
         return (f"{gettext_lazy('Room number')}: {self.room_number}\n"
                 f"{gettext_lazy('Floor')} {self.room_floor}"
                 f"{f"\n Nazwa sali: {self.room_name}" if self.room_name else ""}")
+
+
+
+
+class Worker(AbstractUser):
+    DEPARTMENTS:list[tuple[str,str]] = [
+        ('IT','IT'),
+        ('HR','HR')
+    ]
+
+    #Additional fields
+    deparment = models.CharField(choices=DEPARTMENTS, max_length=10,blank=False,null=False,verbose_name=gettext_lazy('Department'))
+    position = models.CharField(max_length=30, blank=False,null=False,verbose_name=gettext_lazy('Position'))
+    is_preset = models.BooleanField(default=False,verbose_name=gettext_lazy('Preset'))
+
+    start_of_absence=models.DateField(null=True,blank=True,verbose_name=gettext_lazy('Start of absence'))
+    end_of_absence=models.DateField(null=True, blank=True, verbose_name=gettext_lazy('Date of return'))
+    reason_of_absence = models.TextField(max_length=1500,blank=True,null=True,verbose_name=gettext_lazy('Reason of absence'))
+
+    creation_date = models.DateField(auto_now_add=True, verbose_name=gettext_lazy('Date of creation'))
+
+    pk = models.CompositePrimaryKey('first_name','last_name', 'department')
+    REQUIRED_FIELDS = ['last_name','first_name','email','department','position','is_preset']
+
+    class Meta:
+        verbose_name = gettext_lazy('Worker')
+        verbose_name_plural = gettext_lazy('Workers')
