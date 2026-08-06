@@ -1,6 +1,6 @@
 """
 Models for the RoomAvailabilityApp
-Models: Room
+Models: Room, Worker
 """
 
 from django.db import models
@@ -13,8 +13,7 @@ class Room(models.Model):
     """
     Class to model the Room
     Attributes:
-        pk: Primary Key made from "room_number" and "room_floor" atrributes
-        room_number (int): Room number
+        room_number (int): Room number which is PK
         room_floor (int): Room floor
         room_name (str): Room name
         additional_room_info (str): Additional room info
@@ -22,7 +21,8 @@ class Room(models.Model):
         creation_date (date): Date of creation
     """
 
-    room_number = models.PositiveIntegerField(primary_key=True,default=1,verbose_name=gettext_lazy('Room number'))
+    room_number = models.PositiveIntegerField(primary_key=True,default=1,
+                                              verbose_name=gettext_lazy('Room number'))
 
     room_floor = models.PositiveIntegerField(default=0,
                                              validators=[MaxValueValidator(2)],
@@ -38,7 +38,8 @@ class Room(models.Model):
     building_name = models.CharField(max_length=1, blank=True,
                                      null=True, verbose_name=gettext_lazy('Building name'))
 
-    creation_date = models.DateField(auto_now_add=True,verbose_name=gettext_lazy('Date of creation'))
+    creation_date = models.DateField(auto_now_add=True,
+                                     verbose_name=gettext_lazy('Date of creation'))
 
     class Meta:
         verbose_name = gettext_lazy('Room')
@@ -54,6 +55,22 @@ class Room(models.Model):
 
 class Worker(AbstractUser):
 
+    """
+    Class to model the Worker
+    Attributes:
+        first_name (string): First name
+        last_name (string): Last name
+        email (string): Email
+        password (string): Password to login
+        department (string): Department
+        position (string): Position
+        is_preset (boolean): Preset
+        start_of_absence (date): Start of absence
+        end_of_absence (date): Date of return
+        reason_of_absence (string): Reason of absence
+        creation_date (date): Date of creation
+    """
+
     DEPARTMENTS = [
         ("IT", "IT"),
         ("HR", "HR"),
@@ -64,15 +81,20 @@ class Worker(AbstractUser):
         choices=DEPARTMENTS
     )
 
-    position = models.CharField(max_length=30)
+    position = models.CharField(max_length=30, verbose_name=gettext_lazy('Position'))
 
-    is_preset = models.BooleanField(default=False)
+    is_preset = models.BooleanField(default=False,verbose_name=gettext_lazy('Preset'))
 
-    start_of_absence = models.DateField(null=True, blank=True)
+    start_of_absence = models.DateField(null=True, blank=True,
+                                        verbose_name=gettext_lazy('Start of the absence'))
+
     end_of_absence = models.DateField(null=True, blank=True)
-    reason_of_absence = models.TextField(max_length=1500, blank=True)
 
-    creation_date = models.DateField(auto_now_add=True)
+    reason_of_absence = models.TextField(max_length=1500, blank=True,
+                                         verbose_name=gettext_lazy('Reason of absence'))
+
+    creation_date = models.DateField(auto_now_add=True,
+                                     verbose_name=gettext_lazy('Date of creation'))
 
     REQUIRED_FIELDS = [
         "first_name",
