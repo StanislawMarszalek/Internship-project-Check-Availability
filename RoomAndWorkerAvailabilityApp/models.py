@@ -1,5 +1,5 @@
 """
-Models for the RoomAvailabilityApp
+Models for the RoomAndWorkerAvailabilityApp
 Models: Room, Worker
 """
 
