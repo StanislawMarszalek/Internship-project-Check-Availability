@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h2 class="h5 mb-3">Login</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Login</button>
+
+                <a href="{% url 'register' %}" class="btn btn-outline-primary">Create account</a>
+
+                <!-- <a href="{% url 'availability:poznej_poprawic' %}" class="btn btn-outline-secondary">Use as a guest</a>-->
+
+                <a href="{% url 'password_reset' %}" class="btn btn-outline-warning">Forgot password?</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}
