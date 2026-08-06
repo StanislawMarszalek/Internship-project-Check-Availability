@@ -53,25 +53,39 @@ class Room(models.Model):
 
 
 class Worker(AbstractUser):
-    DEPARTMENTS:list[tuple[str,str]] = [
-        ('IT','IT'),
-        ('HR','HR')
+
+    DEPARTMENTS = [
+        ("IT", "IT"),
+        ("HR", "HR"),
     ]
 
-    #Additional fields
-    deparment = models.CharField(choices=DEPARTMENTS, max_length=10,blank=False,null=False,verbose_name=gettext_lazy('Department'))
-    position = models.CharField(max_length=30, blank=False,null=False,verbose_name=gettext_lazy('Position'))
-    is_preset = models.BooleanField(default=False,verbose_name=gettext_lazy('Preset'))
+    department = models.CharField(
+        max_length=10,
+        choices=DEPARTMENTS
+    )
 
-    start_of_absence=models.DateField(null=True,blank=True,verbose_name=gettext_lazy('Start of absence'))
-    end_of_absence=models.DateField(null=True, blank=True, verbose_name=gettext_lazy('Date of return'))
-    reason_of_absence = models.TextField(max_length=1500,blank=True,null=True,verbose_name=gettext_lazy('Reason of absence'))
+    position = models.CharField(max_length=30)
 
-    creation_date = models.DateField(auto_now_add=True, verbose_name=gettext_lazy('Date of creation'))
+    is_preset = models.BooleanField(default=False)
 
-    pk = models.CompositePrimaryKey('first_name','last_name', 'department')
-    REQUIRED_FIELDS = ['last_name','first_name','email','department','position','is_preset']
+    start_of_absence = models.DateField(null=True, blank=True)
+    end_of_absence = models.DateField(null=True, blank=True)
+    reason_of_absence = models.TextField(max_length=1500, blank=True)
+
+    creation_date = models.DateField(auto_now_add=True)
+
+    REQUIRED_FIELDS = [
+        "first_name",
+        "last_name",
+        "email",
+        "department",
+        "position",
+    ]
 
     class Meta:
-        verbose_name = gettext_lazy('Worker')
-        verbose_name_plural = gettext_lazy('Workers')
+        constraints = [
+            models.UniqueConstraint(
+                fields=["first_name", "last_name", "department"],
+                name="unique_worker"
+            )
+        ]
