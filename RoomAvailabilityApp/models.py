@@ -111,3 +111,16 @@ class Worker(AbstractUser):
                 name="unique_worker"
             )
         ]
+
+class Reservation(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE,verbose_name=gettext_lazy('Room number'))
+    worker = models.ForeignKey(Worker, on_delete=models.CASCADE,verbose_name=gettext_lazy('Reserver id'))
+    start_of_reservation = models.DateField(verbose_name=gettext_lazy('Start of the reservation'))
+    end_of_reservation = models.DateField(verbose_name=gettext_lazy('End of the reservation'))
+    description_of_event = models.TextField(max_length=1500, blank=True,null=True,verbose_name=gettext_lazy('Description of event'))
+
+    pk = models.CompositePrimaryKey("worker", "room","start_of_reservation", "end_of_reservation")
+
+    class Meta:
+        verbose_name = gettext_lazy('Reservation')
+        verbose_name_plural = gettext_lazy('Reservations')
