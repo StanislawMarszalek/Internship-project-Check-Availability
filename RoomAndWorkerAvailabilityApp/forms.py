@@ -17,3 +17,16 @@ class AddWorkerForm(UserCreationForm):
             "department": forms.Select(attrs={"class": "form-control"}),
             "position": forms.Select(attrs={"class": "form-control"}),
         }
+
+class ChangeStatusForm(forms.ModelForm):
+    class Meta:
+        model = Worker
+        fields=["is_present","start_of_absence","end_of_absence","reason_of_absence"]
+        #TODO zamast zmeiniac is present zrobic pop orstu jego automatyczna zmiane
+        # a przedtem po nakliknieciu zrobic formularz z potwerdzeniem o
+        # checi zminy statustu a po tym informacja ze sie udalo
+        widgets = {
+            "start_of_absence":forms.DateInput(attrs={"class": "form-control"}),
+            "end_of_absence":forms.DateInput(attrs={"class": "form-control"}),
+            "reason_of_absence":forms.TextInput(attrs={"class": "form-control"}),
+        }
