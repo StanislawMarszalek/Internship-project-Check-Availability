@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <title>Check availability</title>
+</head>
+
+<body class="bg-light">
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+                <h1 class="h3 mb-1">Check availability</h1>
+                <p class="text-muted mb-0">
+                    Simple app to check availability of rooms and absence of workers
+                </p>
+            </div>
+
+            <div class="d-flex gap-2 align-items-center">
+
+                {% if user.is_authenticated %}
+
+                <span class="text-muted">
+                    Logged as: <strong>{{ user.username }}</strong>
+                </span>
+
+                {% if user.is_authenticated and user.is_superuser %}
+                <a  class="btn btn-success">
+                    Add Room dodac pozniej link
+                </a>
+                {% endif %}
+
+                <form method="post" action="{% url 'logout' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger">
+                        Logout
+                    </button>
+                </form>
+
+                {% else %}
+
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">
+                    Login
+                </a>
+
+                <a href="{% url 'register' %}" class="btn btn-outline-success">
+                    Register
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+
+</html>

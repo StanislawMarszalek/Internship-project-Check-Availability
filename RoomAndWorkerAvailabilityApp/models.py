@@ -77,14 +77,20 @@ class Worker(AbstractUser):
         ("HR", "HR"),
     ]
 
+    POSITIONS = [
+        ("Mayor", "Mayor"),
+        ("Secretary", "Secretary"),
+        ("Administrator", "Administrator"),
+    ]
     department = models.CharField(
-        max_length=10,
+        max_length=25,
         choices=DEPARTMENTS
     )
 
-    position = models.CharField(max_length=30, verbose_name=gettext_lazy('Position'))
 
-    is_preset = models.BooleanField(default=False,verbose_name=gettext_lazy('Preset'))
+    position = models.CharField(choices=POSITIONS,max_length=30, verbose_name=gettext_lazy('Position'))
+
+    is_preset = models.BooleanField(default=True,verbose_name=gettext_lazy('Preset'))
 
     start_of_absence = models.DateField(null=True, blank=True,
                                         verbose_name=gettext_lazy('Start of the absence'))
