@@ -8,20 +8,30 @@
 
         <form method="get" class="row g-2 mb-3">
             <div class="col-md-3">
-                <input type="text" name="First name" value="{{ first_name_query }}" class="form-control"
+                <input type="text" name="first_name" value="{{ first_name_query }}" class="form-control"
                     placeholder="Filter by first name">
             </div>
 
             <div class="col-md-3">
-                <input type="text" name="Last name" value="{{ last_name_query }}" class="form-control"
+                <input type="text" name="last_name" value="{{ last_name_query }}" class="form-control"
                     placeholder="Filter by last name">
             </div>
 
             <div class="col-md-2">
                 <select name="department" class="form-select">
-                    <option value="">All s</option>
-                    {% for value, label in departments %}
+                    <option value="">All departments</option>
+                    {% for value, label in departments_classes %}
                     <option value="{{ value }}" {% if departments_query == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="position" class="form-select">
+                    <option value="">All positions</option>
+                    {% for value, label in positions_classes %}
+                    <option value="{{ value }}" {% if positions_query == value %}selected{% endif %}>
                         {{ label }}
                     </option>
                     {% endfor %}
@@ -63,7 +73,11 @@
                         <td>{{ worker.last_name }}</td>
                         <td>{{ worker.position }}</td>
                         <td>{{ worker.department }}</td>
-                        <td>{{ worker.is_active }}</td>
+                        {% if worker.is_active %}
+                            <td>Present</td>
+                            {% else %}
+                        	<td>Absent</td>
+                        {% endif %}
                         <td>
 
                             {% if user.is_authenticated and user.is_superuser %}
