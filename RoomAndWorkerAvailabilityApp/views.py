@@ -4,7 +4,7 @@ from django.contrib.auth import login
 from django.http import HttpResponseForbidden
 
 from .models import Worker
-from .forms import AddWorkerForm
+from .forms import AddWorkerForm, ChangeStatusForm
 
 def register(request):
     if request.method == "POST":
@@ -64,3 +64,18 @@ def worker_list(request):
        "departments_classes":Worker.DEPARTMENTS,
        }
                   )
+
+@login_required
+def change_worker_status(request):
+    if request.method == "POST":
+        form=ChangeStatusForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("availability:worker_list")
+    else:
+        form = ChangeStatusForm()
+    return render(
+        request,
+        "modify_worker/change_status.html",
+        context={"form": form},
+    )
