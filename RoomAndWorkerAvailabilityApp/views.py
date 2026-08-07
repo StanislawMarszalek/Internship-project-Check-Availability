@@ -28,8 +28,39 @@ def register(request):
 
 @login_required
 def worker_list(request):
+
+    first_name_query = request.GET.get("first_name", "").strip()
+    last_name_query = request.GET.get("last_name", "").strip()
+    departments_query=request.GET.get("department", "").strip()
+    positions_query=request.GET.get("position", "").strip()
+    sort_query = request.GET.get("sort", "name_asc").strip()
+
     workers = Worker.objects.all()
 
-    return render(request,
-                  "showing_data/list_workers.html",
-                  {"workers": workers})
+    if first_name_query:
+        workers = workers.filter(first_name__icontains=first_name_query)
+    if last_name_query:
+        workers = workers.filter(last_name__icontains=last_name_query)
+    if departments_query:
+        workers = workers.filter(department=departments_query)
+    if positions_query:
+        workers = workers.filter(position=positions_query)
+    if sort_query == "name_desc":
+        workers = workers.order_by("-first_name", "-last_name")
+    else:
+        workers = workers.order_by("first_name", "last_name")
+
+    return render(
+        request,
+      "showing_data/list_workers.html",
+      {
+       "workers": workers,
+       "first_name_query": first_name_query,
+       "last_name_query": last_name_query,
+       "departments_query": departments_query,
+       "positions_query": positions_query,
+       "sort_query": sort_query,
+       "positions_classes":Worker.POSITIONS,
+       "departments_classes":Worker.DEPARTMENTS,
+       }
+                  )
