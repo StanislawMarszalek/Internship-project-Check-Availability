@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h2 class="h5 mb-3">Worker List</h2>
+
+        <form method="get" class="row g-2 mb-3">
+            <div class="col-md-3">
+                <input type="text" name="First name" value="{{ first_name_query }}" class="form-control"
+                    placeholder="Filter by first name">
+            </div>
+
+            <div class="col-md-3">
+                <input type="text" name="Last name" value="{{ last_name_query }}" class="form-control"
+                    placeholder="Filter by last name">
+            </div>
+
+            <div class="col-md-2">
+                <select name="department" class="form-select">
+                    <option value="">All s</option>
+                    {% for value, label in departments %}
+                    <option value="{{ value }}" {% if departments_query == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <select name="sort" class="form-select">
+                    <option value="name_asc" {% if departments_query == value %}selected{% endif %}>Name A-Z</option>
+                    <option value="name_desc" {% if sort_query == "name_desc" %}selected{% endif %}>Name Z-A</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Apply</button>
+                <a href="{% url 'availability:workers_list' %}" class="btn btn-outline-secondary">Clear</a>
+            </div>
+        </form>
+
+        {% if workers %}
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Position</th>
+                        <th>Departmnet</th>
+                        <th>Present</th>
+                        {% if user.is_authenticated and user.is_superuser %}
+                        <th>Actions</th>
+                            {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for worker in workers %}
+                    <tr>
+                        <td>{{ worker.first_name }}</td>
+                        <td>{{ worker.last_name }}</td>
+                        <td>{{ worker.position }}</td>
+                        <td>{{ worker.department }}</td>
+                        <td>{{ worker.is_active }}</td>
+                        <td>
+
+                            {% if user.is_authenticated and user.is_superuser %}
+                            <a class="btn btn-sm btn-warning">
+                                Edit
+                            </a>
+                            <a  class="btn btn-sm btn-danger">
+                                Delete
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info mb-0">
+            There are no workers matching the selected filters.
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
