@@ -15,7 +15,7 @@ def register(request):
 
             login(request, user)
 
-            return redirect("availability:availability_list")
+            return redirect("availability:worker_list")
 
     else:
         form = AddWorkerForm()
@@ -25,3 +25,11 @@ def register(request):
         "registration/register.html",
         {"form": form},
     )
+
+@login_required
+def worker_list(request):
+    workers = Worker.objects.all()
+
+    return render(request,
+                  "showing_data/list_workers.html",
+                  {"workers": workers})
