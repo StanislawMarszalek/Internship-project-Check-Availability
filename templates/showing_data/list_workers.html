@@ -58,7 +58,9 @@
             <div class="col-md-2 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Apply</button>
                 <a href="{% url 'availability:workers_list' %}" class="btn btn-outline-secondary">Clear</a>
+                {% if user.is_authenticated and user.is_superuser %}
                 <a href="/admin/RoomAndWorkerAvailabilityApp/worker/add/" class="btn btn-outline-warning">Add Worker</a>
+                {% endif %}
             </div>
         </form>
 
@@ -72,9 +74,9 @@
                         <th>Position</th>
                         <th>Department</th>
                         <th>Present</th>
-                        {% if user.is_authenticated and user.is_superuser %}
+
                         <th>Actions</th>
-                            {% endif %}
+
                     </tr>
                 </thead>
                 <tbody>
@@ -90,7 +92,6 @@
                         	<td>Absent</td>
                         {% endif %}
                         <td>
-
                             {% if user.is_authenticated and user.is_superuser %}
                             <a class="btn btn-sm btn-warning" href="{% url 'admin:RoomAndWorkerAvailabilityApp_worker_change' worker.pk %}">
                                 Edit
@@ -98,6 +99,15 @@
                             <a  class="btn btn-sm btn-danger" href="{% url 'admin:RoomAndWorkerAvailabilityApp_worker_delete' worker.pk %}">
                                 Delete
                             </a>
+                            {% endif %}
+                            {% if not worker.is_present %}
+                                <a  class="btn btn-sm btn-primary" href="{% url 'admin:RoomAndWorkerAvailabilityApp_worker_delete' worker.pk %}">
+                                Absence details
+                            </a>
+                            {% else %}
+                                {% if not user.is_superuser %}
+                                    <a>No action available</a>
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>
