@@ -140,11 +140,29 @@ def rooms_list(request):
     room_floor_query = request.GET.get("room_floor", "").strip()
     additional_room_info_query = request.GET.get("additional_room_info", "").strip()
     building_name_query = request.GET.get("building_name", "").strip()
+    sort_query = request.GET.get("sort", "name_asc").strip()
 
     rooms = Room.objects.all()
 
+    if room_number_query:
+        rooms = rooms.filter(room_number=room_number_query)
 
+    if room_name_query:
+        rooms = rooms.filter(room_name__icontains=room_name_query)
 
+    if room_floor_query:
+        rooms = rooms.filter(room_floor=room_floor_query)
+
+    if additional_room_info_query:
+        rooms = rooms.filter(additional_room_info__icontains=additional_room_info_query)
+
+    if building_name_query:
+        rooms = rooms.filter(building_name__icontains=building_name_query)
+
+    if sort_query == "name_desc":
+        rooms = rooms.order_by("-room_number", "-room_name")
+    else:
+        rooms = rooms.order_by("room_number", "room_name")
 
     return render(
         request,
@@ -153,9 +171,10 @@ def rooms_list(request):
             "rooms": rooms,
             "room_number_query": room_number_query,
             "room_name_query": room_name_query,
-            "room_flor_query": room_flor_query,
+            "room_flor_query": room_floor_query,
             "additional_room_info_query": additional_room_info_query,
             "building_name_query": building_name_query,
+            "room_floors":Room.FLOORS,
 
         }
     )
