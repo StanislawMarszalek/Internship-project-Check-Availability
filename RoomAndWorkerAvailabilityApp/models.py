@@ -2,7 +2,7 @@
 Models for the RoomAndWorkerAvailabilityApp
 Models: Room, Worker, Reservvation
 """
-
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator
@@ -118,6 +118,50 @@ class Worker(AbstractUser):
                 name="unique_worker"
             )
         ]
+
+    #Add costraints for start,end,reason of absance
+    def clean(self):
+        super().clean()
+
+        errors = {}
+
+        if self.is_present:
+            self.start_of_absence = None
+            self.end_of_absence = None
+            self.reason_of_absence = ""
+
+        else:
+            if not self.start_of_absence:
+                errors["start_of_absence"] = gettext_lazy(
+                    "Start date of absence is required."
+                )
+
+            if not self.end_of_absence:
+                errors["end_of_absence"] = gettext_lazy(
+                    "End date of absence is required."
+                )
+
+            if not self.reason_of_absence.strip():
+                errors["reason_of_absence"] = gettext_lazy(
+                    "Reason of absence is required."
+                )
+
+            if (
+                    self.start_of_absence
+                    and self.end_of_absence
+                    and self.start_of_absence > self.end_of_absence
+            ):
+                errors["end_of_absence"] = gettext_lazy(
+                    "The end date cannot be earlier than the start date."
+                )
+
+        if errors:
+            raise ValidationError(errors)
+
+    #To force clean when save
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 class Reservation(models.Model):
     """
