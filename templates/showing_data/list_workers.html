@@ -5,7 +5,17 @@
     <div class="card-body">
 
         <h2 class="h5 mb-3">Worker List</h2>
-
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert">
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
         <form method="get" class="row g-2 mb-3">
             <div class="col-md-3">
                 <input type="text" name="first_name" value="{{ first_name_query }}" class="form-control"
@@ -48,6 +58,7 @@
             <div class="col-md-2 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Apply</button>
                 <a href="{% url 'availability:workers_list' %}" class="btn btn-outline-secondary">Clear</a>
+                <a href="/admin/RoomAndWorkerAvailabilityApp/worker/add/" class="btn btn-outline-warning">Add Worker</a>
             </div>
         </form>
 
@@ -81,10 +92,10 @@
                         <td>
 
                             {% if user.is_authenticated and user.is_superuser %}
-                            <a class="btn btn-sm btn-warning">
+                            <a class="btn btn-sm btn-warning" href="{% url 'admin:RoomAndWorkerAvailabilityApp_worker_change' worker.pk %}">
                                 Edit
                             </a>
-                            <a  class="btn btn-sm btn-danger">
+                            <a  class="btn btn-sm btn-danger" href="{% url 'admin:RoomAndWorkerAvailabilityApp_worker_delete' worker.pk %}">
                                 Delete
                             </a>
                             {% endif %}
