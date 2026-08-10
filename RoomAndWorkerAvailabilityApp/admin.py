@@ -43,6 +43,10 @@ class RoomAdmin(admin.ModelAdmin):
                 "admin:RoomAndWorkerAvailabilityApp_room_change",
                 obj.pk
             )
+        if "_addanother" in request.POST:
+            return redirect(
+                "admin:RoomAndWorkerAvailabilityApp_room_add"
+            )
 
         return redirect("availability:rooms_list")
 
