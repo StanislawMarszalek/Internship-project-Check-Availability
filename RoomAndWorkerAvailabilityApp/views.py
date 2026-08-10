@@ -115,3 +115,19 @@ def change_worker_status(request, pk):
             "worker": worker,
         },
     )
+
+def show_absence_details(request,pk):
+    worker = get_object_or_404(Worker, pk=pk)
+    start=worker.start_of_absence
+    end=worker.end_of_absence
+    reason=worker.reason_of_absence
+
+    return render(
+        request,
+        "showing_data/absence_details.html",
+        context={
+            "start": start,
+            "end": end,
+            "reason": reason,
+        }
+    )
