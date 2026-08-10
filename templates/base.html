@@ -27,10 +27,13 @@
                 <span class="text-muted">
                     Logged as: <strong>{{ user.username }}</strong>
                 </span>
+                <a  class="btn btn-info" href="{% url 'availability:confirm_worker_status' user.pk %}">
+                   Change satus
+                </a>
 
                 {% if user.is_authenticated and user.is_superuser %}
                 <a  class="btn btn-success">
-                    Add Room dodac pozniej link
+                    Add Room
                 </a>
                 {% endif %}
 
