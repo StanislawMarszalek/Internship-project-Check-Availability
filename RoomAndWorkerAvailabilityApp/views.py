@@ -171,7 +171,7 @@ def rooms_list(request):
             "rooms": rooms,
             "room_number_query": room_number_query,
             "room_name_query": room_name_query,
-            "room_flor_query": room_floor_query,
+            "room_floor_query": room_floor_query,
             "additional_room_info_query": additional_room_info_query,
             "building_name_query": building_name_query,
             "room_floors":Room.FLOORS,
