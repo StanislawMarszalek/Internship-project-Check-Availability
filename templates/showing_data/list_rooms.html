@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h2 class="h5 mb-3">Room List</h2>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert">
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <form method="get" class="row g-2 mb-3">
+
+            <div class="col-md-2">
+                <input type="number" name="room_number" value="{{ room_number_query }}" class="form-control"
+                    placeholder="Filter by room number">
+            </div>
+
+            <div class="col-md-2">
+                <select name="room_floor" class="form-select">
+                    <option value="">All floors</option>
+                    {% for value, label in room_floors %}
+                    <option value="{{ value }}" {% if room_floor_query == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <input type="text" name="room_name" value="{{ room_name_query }}" class="form-control"
+                    placeholder="Filter by room name">
+            </div>
+
+            <div class="col-md-2">
+                <input type="text" name="building_name" value="{{ building_name_query }}" class="form-control"
+                    placeholder="Filter by building">
+            </div>
+            <div class="col-md-2">
+                <select name="sort" class="form-select">
+                    <option value="name_asc" {% if departments_query == value %}selected{% endif %}>Name A-Z</option>
+                    <option value="name_desc" {% if sort_query == "name_desc" %}selected{% endif %}>Name Z-A</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Apply</button>
+                <a href="{% url 'availability:rooms_list' %}" class="btn btn-outline-secondary">Clear</a>
+                {% if user.is_authenticated and user.is_superuser %}
+                <a href="/admin/RoomAndWorkerAvailabilityApp/worker/add/" class="btn btn-outline-warning">Add Worker</a>
+                {% endif %}
+            </div>
+        </form>
+
+        {% if rooms %}
+            <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Room number</th>
+                        <th>Floor</th>
+                        <th>Room name</th>
+                        <th>Additional info</th>
+                        <th>Building</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for room in rooms %}
+                    <tr>
+                        <td>{{ room.room_number }}</td>
+                        <td>{{ room.room_floor }}</td>
+                        <td>{{ room.room_name|default:"-" }}</td>
+                        <td>{{ room.additional_room_info|default:"-" }}</td>
+                        <td>{{ room.building_name|default:"-" }}</td>
+                        <td>
+                            {% if user.is_authenticated and user.is_superuser %}
+                                <a class="btn btn-sm btn-warning"
+                                   href="{% url 'admin:RoomAndWorkerAvailabilityApp_room_change' room.pk %}">
+                                    Edit
+                                </a>
+
+                                <a class="btn btn-sm btn-danger"
+                                   href="{% url 'admin:RoomAndWorkerAvailabilityApp_room_delete' room.pk %}">
+                                    Delete
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+            {% else %}
+
+                <div class="alert alert-info mb-0">
+                    There are no rooms matching the selected filters.
+                </div>
+
+            {% endif %}
+
+    </div>
+</div>
+{% endblock %}
