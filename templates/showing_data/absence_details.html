@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card shadow-sm">
+    <div class="card-body">
+
+        <h2 class="h5 mb-3">Absence details</h2>
+        <p><strong>Start of the absence</strong>: {{ start }}</p>
+        <p><strong>End of the absence</strong>: {{ end }}</p>
+        <p><strong>Reason of the absence</strong>: {{ reason }}</p>
+
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-primary"  href={% url 'availability:workers_list' %}>Back</a>
+    </div>
+</div>
+{% endblock %}
