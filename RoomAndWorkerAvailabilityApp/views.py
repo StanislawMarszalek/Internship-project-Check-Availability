@@ -137,11 +137,15 @@ def rooms_list(request):
 
     room_number_query = request.GET.get("room_number", "").strip()
     room_name_query = request.GET.get("room_name", "").strip()
-    room_flor_query = request.GET.get("room_flor", "").strip()
+    room_floor_query = request.GET.get("room_floor", "").strip()
     additional_room_info_query = request.GET.get("additional_room_info", "").strip()
     building_name_query = request.GET.get("building_name", "").strip()
 
     rooms = Room.objects.all()
+
+
+
+
     return render(
         request,
         "showing_data/list_rooms.html",
