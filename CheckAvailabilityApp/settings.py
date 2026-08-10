@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'RoomAndWorkerAvailabilityApp.apps.RoomavailabilityappConfig',
+    'schedule',
 ]
 
 MIDDLEWARE = [
@@ -70,7 +71,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CheckAvailabilityApp.wsgi.application'
 
-
+TEMPLATE_CONTEXT_PROCESSORS = [
+    "django.template.context_processors.request"
+]
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
