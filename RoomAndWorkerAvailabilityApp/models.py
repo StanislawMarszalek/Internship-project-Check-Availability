@@ -21,6 +21,11 @@ class Room(models.Model):
         creation_date (date): Date of creation
     """
 
+    FLOORS = [
+        (0,0),
+        (1, 1),
+        (2, 2),
+    ]
     room_number = models.PositiveIntegerField(primary_key=True,default=1,
                                               verbose_name=gettext_lazy('Room number'))
 
