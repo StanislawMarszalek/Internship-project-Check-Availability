@@ -88,7 +88,7 @@ def change_worker_status(request, pk):
 
     if not worker.is_present:
         worker.is_present = True
-        worker.save(update_fields=["is_present"])
+        worker.save()
 
         return redirect("availability:workers_list")
 
