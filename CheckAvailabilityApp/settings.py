@@ -102,8 +102,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = "/workers"
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/login/"
 #TODO podmienic potem REDICRECT LOGINu na listy
 
 # Internationalization
