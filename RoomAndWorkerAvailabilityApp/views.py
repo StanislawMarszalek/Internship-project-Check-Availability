@@ -66,16 +66,54 @@ def worker_list(request):
                   )
 
 @login_required
-def change_worker_status(request):
-    if request.method == "POST":
-        form=ChangeStatusForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("availability:worker_list")
-    else:
-        form = ChangeStatusForm()
+def confirm_worker_status(request, pk):
+    worker = get_object_or_404(Worker, pk=pk)
+
     return render(
         request,
-        "modify_worker/change_status.html",
-        context={"form": form},
+        "modify_worker/confirm_change_status.html",
+        {
+            "worker": worker,
+        },
+    )
+
+
+@login_required
+def change_worker_status(request, pk):
+    worker = get_object_or_404(Worker, pk=pk)
+    if worker.username != request.user.username and not request.user.is_staff:
+        return HttpResponseForbidden(
+            "You are not the user or the admin"
+        )
+
+    if not worker.is_present:
+        worker.is_present = True
+        worker.save(update_fields=["is_present"])
+
+        return redirect("availability:workers_list")
+
+    if request.method == "POST":
+        form = ChangeStatusForm(
+            request.POST,
+            instance=worker,
+        )
+
+        if form.is_valid():
+            form.save()
+
+            worker.is_present = False
+            worker.save()
+
+            return redirect("availability:workers_list")
+
+    else:
+        form = ChangeStatusForm(instance=worker)
+
+    return render(
+        request,
+        "modify_worker/change_worker_status.html",
+        {
+            "form": form,
+            "worker": worker,
+        },
     )
