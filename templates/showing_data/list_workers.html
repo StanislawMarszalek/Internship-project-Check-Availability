@@ -101,7 +101,7 @@
                             </a>
                             {% endif %}
                             {% if not worker.is_present %}
-                                <a  class="btn btn-sm btn-primary" href="{% url 'availability:absence_details' worker.pk %}">
+                                <a  class="btn btn-info" href="{% url 'availability:absence_details' worker.pk %}">
                                 Absence details
                             </a>
                             {% else %}
