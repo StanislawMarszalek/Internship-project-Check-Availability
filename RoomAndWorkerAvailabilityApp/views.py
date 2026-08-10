@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.http import HttpResponseForbidden
 
-from .models import Worker
+from .models import Worker, Room
 from .forms import AddWorkerForm, ChangeStatusForm
 
 def register(request):
@@ -129,5 +129,29 @@ def show_absence_details(request,pk):
             "start": start,
             "end": end,
             "reason": reason,
+        }
+    )
+
+@login_required
+def rooms_list(request):
+
+    room_number_query = request.GET.get("room_number", "").strip()
+    room_name_query = request.GET.get("room_name", "").strip()
+    room_flor_query = request.GET.get("room_flor", "").strip()
+    additional_room_info_query = request.GET.get("additional_room_info", "").strip()
+    building_name_query = request.GET.get("building_name", "").strip()
+
+    rooms = Room.objects.all()
+    return render(
+        request,
+        "showing_data/list_rooms.html",
+        {
+            "rooms": rooms,
+            "room_number_query": room_number_query,
+            "room_name_query": room_name_query,
+            "room_flor_query": room_flor_query,
+            "additional_room_info_query": additional_room_info_query,
+            "building_name_query": building_name_query,
+
         }
     )
