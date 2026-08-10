@@ -93,6 +93,8 @@ def change_worker_status(request, pk):
         return redirect("availability:workers_list")
 
     if request.method == "POST":
+        worker.is_present = False
+
         form = ChangeStatusForm(
             request.POST,
             instance=worker,
@@ -100,10 +102,6 @@ def change_worker_status(request, pk):
 
         if form.is_valid():
             form.save()
-
-            worker.is_present = False
-            worker.save()
-
             return redirect("availability:workers_list")
 
     else:
