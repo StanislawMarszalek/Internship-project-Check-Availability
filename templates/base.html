@@ -31,11 +31,6 @@
                    Change satus
                 </a>
 
-                {% if user.is_authenticated and user.is_superuser %}
-                <a  class="btn btn-success">
-                    Add Room
-                </a>
-                {% endif %}
 
                 <form method="post" action="{% url 'logout' %}" class="d-inline">
                     {% csrf_token %}
