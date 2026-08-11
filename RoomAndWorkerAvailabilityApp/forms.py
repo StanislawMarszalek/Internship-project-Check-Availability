@@ -1,7 +1,8 @@
 from django import forms
-from RoomAndWorkerAvailabilityApp.models import Room, Worker
+from RoomAndWorkerAvailabilityApp.models import Worker
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+
+
 
 class AddWorkerForm(UserCreationForm):
     class Meta:
