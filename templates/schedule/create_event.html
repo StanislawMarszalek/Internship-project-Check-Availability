@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card shadow-sm">
+
+    <div class="card-header">
+        <h4 class="mb-0">Add new session</h4>
+    </div>
+
+    <div class="card-body">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                {{ form.title }}
+                {{ form.title.errors }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                {{ form.description }}
+                {{ form.description.errors }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Start</label>
+                {{ form.start }}
+                {{ form.start.errors }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">End</label>
+                {{ form.end }}
+                {{ form.end.errors }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Repeat</label>
+                {{ form.rule }}
+                {{ form.rule.errors }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">End of repeating</label>
+                {{ form.end_recurring_period }}
+                {{ form.end_recurring_period.errors }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Color</label>
+                <br>
+                {{ form.color_event }}
+                {{ form.color_event.errors }}
+            </div>
+
+            <div class="d-flex gap-2">
+
+                <button type="submit" class="btn btn-success">
+                    Save
+                </button>
+
+                <a href="{% url 'fullcalendar' view.kwargs.calendar_slug %}"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
