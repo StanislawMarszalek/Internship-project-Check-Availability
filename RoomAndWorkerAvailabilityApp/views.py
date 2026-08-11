@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.http import HttpResponseForbidden
 from django.views.generic import TemplateView
+from schedule.models import Event, Calendar
 
 from .models import Worker, Room
 from .forms import AddWorkerForm, ChangeStatusForm
@@ -187,6 +188,32 @@ def rooms_list(request):
 
 class CustomCreateEventView(CreateEventView):
     form_class = AddEventForm
+
+    def form_valid(self, form):
+
+        calendar = Calendar.objects.get(
+            slug=self.kwargs["calendar_slug"]
+        )
+
+        start = form.cleaned_data["start"]
+        end = form.cleaned_data["end"]
+
+        overlapping_events = Event.objects.filter(
+            calendar=calendar,
+            start__lt=end,
+            end__gt=start,
+        )
+
+        if overlapping_events.exists():
+            form.add_error(
+                None,
+                "Wybrany termin nachodzi na istniejący event."
+            )
+            return self.form_invalid(form)
+
+        form.instance.calendar = calendar
+
+        return super().form_valid(form)
 
 class CustomDeleteEventView(DeleteEventView):
     def get_success_url(self):
