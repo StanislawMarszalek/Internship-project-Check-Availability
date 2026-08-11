@@ -1,36 +1,59 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <title>Check availability</title>
+
+
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+/>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<title>{% block head_title %}Check availability{% endblock %}</title>
+
+{% block extra_head %}{% endblock %}
+
+
 </head>
 
 <body class="bg-light">
-    <div class="container py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
 
-            <div>
-                <h1 class="h3 mb-1">Check availability</h1>
-                <p class="text-muted mb-0">
-                    Simple app to check availability of rooms and absence of workers
-                </p>
-            </div>
 
-            <div class="d-flex gap-2 align-items-center">
+<div class="container py-4">
 
-                {% if user.is_authenticated %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1 class="h3 mb-1">Check availability</h1>
+
+            <p class="text-muted mb-0">
+                Simple app to check availability of rooms and absence of workers
+            </p>
+        </div>
+
+        <div class="d-flex gap-2 align-items-center">
+
+            {% if user.is_authenticated %}
 
                 <span class="text-muted">
                     Logged as: <strong>{{ user.username }}</strong>
                 </span>
-                <a  class="btn btn-info" href="{% url 'availability:confirm_worker_status' user.pk %}">
-                   Change satus
-                </a>
 
+                <a
+                    class="btn btn-info"
+                    href="{% url 'availability:confirm_worker_status' user.pk %}"
+                >
+                    Change status
+                </a>
 
                 <form method="post" action="{% url 'logout' %}" class="d-inline">
                     {% csrf_token %}
@@ -39,7 +62,7 @@
                     </button>
                 </form>
 
-                {% else %}
+            {% else %}
 
                 <a href="{% url 'login' %}" class="btn btn-outline-primary">
                     Login
@@ -49,14 +72,19 @@
                     Register
                 </a>
 
-                {% endif %}
-
-            </div>
+            {% endif %}
 
         </div>
-        {% block content %}{% endblock %}
-    </div>
-</body>
 
+    </div>
+
+    {% block body %}
+        {% block content %}{% endblock %}
+    {% endblock %}
+
+</div>
+
+
+</body>
 
 </html>
