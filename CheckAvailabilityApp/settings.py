@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "django.template.context_processors.request",
             ],
         },
     },
@@ -71,9 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CheckAvailabilityApp.wsgi.application'
 
-TEMPLATE_CONTEXT_PROCESSORS = [
-    "django.template.context_processors.request"
-]
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
