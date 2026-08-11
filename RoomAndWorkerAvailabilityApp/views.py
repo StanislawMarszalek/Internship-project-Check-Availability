@@ -14,6 +14,10 @@ from schedule.views import DeleteEventView
 from django.shortcuts import redirect
 from schedule.views import EditEventView
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+#TODO uporzadkowac wszedzie importy
+
 def register(request):
     if request.method == "POST":
         form = AddWorkerForm(request.POST)
@@ -188,7 +192,7 @@ def rooms_list(request):
         }
     )
 
-class CustomCreateEventView(CreateEventView):
+class CustomCreateEventView(LoginRequiredMixin, CreateEventView):
     form_class = AddEventForm
 
     def form_valid(self, form):
@@ -217,7 +221,7 @@ class CustomCreateEventView(CreateEventView):
 
         return super().form_valid(form)
 
-class CustomDeleteEventView(DeleteEventView):
+class CustomDeleteEventView(LoginRequiredMixin, DeleteEventView):
     def get_success_url(self):
         return redirect(
             "fullcalendar",
@@ -225,7 +229,7 @@ class CustomDeleteEventView(DeleteEventView):
         ).url
 
 
-class CustomEditEventView(EditEventView):
+class CustomEditEventView(LoginRequiredMixin, EditEventView):
     form_class = AddEventForm
 
     def get_success_url(self):
@@ -234,7 +238,7 @@ class CustomEditEventView(EditEventView):
             calendar_slug=self.object.calendar.slug
         ).url
 
-class MyFullCalendarView(TemplateView):
+class MyFullCalendarView(LoginRequiredMixin, TemplateView):
     template_name = "schedule/fullcalendar.html"
 
     def get_context_data(self, **kwargs):
