@@ -23,4 +23,5 @@ urlpatterns = [
     path("", include("RoomAndWorkerAvailabilityApp.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("register/", views.register, name="register"),
+    path('schedule/', include('schedule.urls')),
 ]

@@ -1,6 +1,10 @@
 from django.urls import path
 from . import views
+from django.views.generic import TemplateView
+from django.conf.urls import include
 from django.contrib.auth import views as auth_views
+from django.contrib import admin
+from django.conf import settings
 app_name = "availability"
 urlpatterns = [
     path("register/", views.register, name="register_worker"),
