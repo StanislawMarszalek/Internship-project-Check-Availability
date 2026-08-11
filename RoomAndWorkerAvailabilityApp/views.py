@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -222,6 +223,13 @@ class CustomCreateEventView(LoginRequiredMixin, CreateEventView):
         return super().form_valid(form)
 
 class CustomDeleteEventView(LoginRequiredMixin, DeleteEventView):
+
+    def dispatch(self,request,*args,**kwargs):
+        self.object = self.get_object()
+        if self.object.creator != request.user:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
     def get_success_url(self):
         return redirect(
             "fullcalendar",
@@ -231,6 +239,12 @@ class CustomDeleteEventView(LoginRequiredMixin, DeleteEventView):
 
 class CustomEditEventView(LoginRequiredMixin, EditEventView):
     form_class = AddEventForm
+
+    def dispatch(self,request,*args,**kwargs):
+        self.object = self.get_object()
+        if self.object.creator != request.user:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         return redirect(
