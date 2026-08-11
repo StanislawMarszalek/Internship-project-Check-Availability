@@ -23,5 +23,10 @@ urlpatterns = [
     path("", include("RoomAndWorkerAvailabilityApp.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("register/", views.register, name="register"),
+    path(
+        "schedule/event/create/<slug:calendar_slug>/",
+        views.CustomCreateEventView.as_view(),
+        name="calendar_create_event",
+    ),
     path('schedule/', include('schedule.urls')),
 ]
