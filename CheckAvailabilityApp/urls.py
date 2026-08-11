@@ -33,5 +33,10 @@ urlpatterns = [
         views.CustomDeleteEventView.as_view(),
         name="delete_event",
     ),
+    path(
+        "schedule/event/edit/<slug:calendar_slug>/<int:event_id>/",
+        views.CustomEditEventView.as_view(),
+        name="edit_event",
+    ),
     path('schedule/', include('schedule.urls')),
 ]
