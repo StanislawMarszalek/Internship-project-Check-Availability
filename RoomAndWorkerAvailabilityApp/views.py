@@ -7,6 +7,10 @@ from .models import Worker, Room
 from .forms import AddWorkerForm, ChangeStatusForm
 from schedule.views import CreateEventView
 from .forms import AddEventForm
+
+from schedule.views import DeleteEventView
+from django.shortcuts import redirect
+
 def register(request):
     if request.method == "POST":
         form = AddWorkerForm(request.POST)
@@ -182,3 +186,10 @@ def rooms_list(request):
 
 class CustomCreateEventView(CreateEventView):
     form_class = AddEventForm
+
+class CustomDeleteEventView(DeleteEventView):
+    def get_success_url(self):
+        return redirect(
+            "fullcalendar",
+            calendar_slug=self.object.calendar.slug
+        ).url
