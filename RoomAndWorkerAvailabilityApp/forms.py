@@ -1,7 +1,7 @@
 from django import forms
 from RoomAndWorkerAvailabilityApp.models import Worker
 from django.contrib.auth.forms import UserCreationForm
-
+from schedule.models import Event
 
 
 class AddWorkerForm(UserCreationForm):
@@ -59,6 +59,53 @@ class ChangeStatusForm(forms.ModelForm):
             self.add_error(
                 "end_of_absence",
                 "End date cannot be earlier than start date."
+            )
+
+        return cleaned_data
+
+
+class AddEventForm(forms.ModelForm):
+
+    class Meta:
+        model = Event
+
+        fields = [
+            "title",
+            "description",
+            "start",
+            "end",
+            "rule",
+            "end_recurring_period",
+            "color_event",
+        ]
+
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control","rows": 4}),
+
+            "start": forms.DateTimeInput(attrs={"class": "form-control",
+                                                "type": "datetime-local"}),
+
+            "end": forms.DateTimeInput(attrs={"class": "form-control",
+                                              "type": "datetime-local"}),
+
+            "rule": forms.Select(attrs={"class": "form-control"}),
+
+            "end_recurring_period": forms.DateTimeInput(attrs={"class": "form-control",
+                                                               "type": "datetime-local",}),
+
+            "color_event": forms.TextInput(attrs={"class": "form-control","type": "color"})
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        start = cleaned_data.get("start")
+        end = cleaned_data.get("end")
+
+        if start and end and end <= start:
+            raise forms.ValidationError(
+                "Data zakończenia musi być późniejsza niż data rozpoczęcia."
             )
 
         return cleaned_data
