@@ -78,6 +78,8 @@ document.addEventListener("DOMContentLoaded", function () {
         editable: true,
         selectable: true,
         dayMaxEvents: true,
+        eventOverlap: false,
+        selectOverlap: false,
 
         events: "{% url 'api_occurrences' %}?calendar_slug={{ calendar_slug }}",
 
