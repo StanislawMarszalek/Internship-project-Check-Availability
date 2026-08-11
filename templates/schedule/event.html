@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load i18n scheduletags %}
+
+{% block body %}
+
+<div class="navigation mb-3">
+    <a href="{% url 'fullcalendar' event.calendar.slug %}"
+       class="btn btn-primary">
+        ← Back to calendar
+    </a>
+</div>
+
+<div class="event_actions" align="center">
+    {% if back_url %}
+    <a href="{{ back_url }}">
+        <span class="bi bi-arrow-left-circle"></span>
+    </a>
+    &nbsp;
+    {% endif %}
+
+    <a href="{% url 'edit_event' event.calendar.slug event.id %}">
+        {% trans "Edit" %}
+        <span class="bi bi-pencil"></span>
+    </a>
+
+    &nbsp;
+
+    <a href="{% url 'delete_event' event.id %}">
+        {% trans "Delete" %}
+        <span class="bi bi-x-circle"></span>
+    </a>
+</div>
+
+<h2 align="center">{{ event.title }}</h2>
+
+<table align="center" class="table table-hover">
+    <tr>
+        <td>{% trans "Starts" %}</td>
+        <td>
+            {% blocktrans with event.start|date:_("DATETIME_FORMAT") as start_date %}
+                {{ start_date }}
+            {% endblocktrans %}
+        </td>
+    </tr>
+
+    <tr>
+        <td>{% trans "Ends" %}</td>
+        <td>
+            {% blocktrans with event.end|date:_("DATETIME_FORMAT") as end_date %}
+                {{ end_date }}
+            {% endblocktrans %}
+        </td>
+    </tr>
+
+    <tr>
+        <td>{% trans "Reoccurs" %}</td>
+
+        {% if event.rule %}
+        <td>
+            {{ event.rule.name }}
+            {% trans "until" %}
+            {% blocktrans with event.end_recurring_period|date:_("DATETIME_FORMAT") as end_recurring_date %}
+                {{ end_recurring_date }}
+            {% endblocktrans %}
+        </td>
+        {% else %}
+        <td>
+            {% trans "Never. This is a 'one time only' event." %}
+        </td>
+        {% endif %}
+    </tr>
+</table>
+
+{% if event.description %}
+    <h3>{% trans "Description" %}</h3>
+    <p>{{ event.description }}</p>
+{% endif %}
+
+{% endblock %}
