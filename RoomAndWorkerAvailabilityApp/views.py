@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.http import HttpResponseForbidden
+from django.views.generic import TemplateView
 
 from .models import Worker, Room
 from .forms import AddWorkerForm, ChangeStatusForm
@@ -204,3 +205,10 @@ class CustomEditEventView(EditEventView):
             calendar_slug=self.object.calendar.slug
         ).url
 
+class MyFullCalendarView(TemplateView):
+    template_name = "schedule/fullcalendar.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["calendar_slug"] = self.kwargs["calendar_slug"]
+        return context
