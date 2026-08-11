@@ -230,6 +230,16 @@ class CustomDeleteEventView(LoginRequiredMixin, DeleteEventView):
             raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if "cancel" in request.POST:
+            return redirect(
+                "my_fullcalendar",
+                calendar_slug=self.object.calendar.slug
+            )
+        return super().post(request, *args, **kwargs)
+
     def get_success_url(self):
         return redirect(
             "fullcalendar",
