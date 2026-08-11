@@ -17,7 +17,7 @@
     </a>
     &nbsp;
     {% endif %}
-
+    {% if event.creator == user or user.is_superuser %}
     <a href="{% url 'edit_event' event.calendar.slug event.id %}">
         {% trans "Edit" %}
         <span class="bi bi-pencil"></span>
@@ -29,11 +29,16 @@
         {% trans "Delete" %}
         <span class="bi bi-x-circle"></span>
     </a>
+    {% endif %}
 </div>
 
 <h2 align="center">{{ event.title }}</h2>
 
 <table align="center" class="table table-hover">
+    <tr>
+        <td>{% trans "Creator" %}</td>
+        <td>{{ event.creator }}</td>
+    </tr>
     <tr>
         <td>{% trans "Starts" %}</td>
         <td>
