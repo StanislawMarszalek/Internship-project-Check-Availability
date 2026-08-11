@@ -38,5 +38,12 @@ urlpatterns = [
         views.CustomEditEventView.as_view(),
         name="edit_event",
     ),
+    path(
+            "schedule/fullcalendar/<slug:calendar_slug>/",
+            views.MyFullCalendarView.as_view(),
+            name="my_fullcalendar",
+        ),
+
+path("schedule/", include("schedule.urls")),
     path('schedule/', include('schedule.urls')),
 ]
