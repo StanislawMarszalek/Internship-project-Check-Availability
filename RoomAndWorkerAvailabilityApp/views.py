@@ -10,7 +10,7 @@ from .forms import AddEventForm
 
 from schedule.views import DeleteEventView
 from django.shortcuts import redirect
-
+from schedule.views import EditEventView
 def register(request):
     if request.method == "POST":
         form = AddWorkerForm(request.POST)
@@ -193,3 +193,14 @@ class CustomDeleteEventView(DeleteEventView):
             "fullcalendar",
             calendar_slug=self.object.calendar.slug
         ).url
+
+
+class CustomEditEventView(EditEventView):
+    form_class = AddEventForm
+
+    def get_success_url(self):
+        return redirect(
+            "fullcalendar",
+            calendar_slug=self.object.calendar.slug
+        ).url
+
