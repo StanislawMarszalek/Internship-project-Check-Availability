@@ -5,7 +5,8 @@ from django.http import HttpResponseForbidden
 
 from .models import Worker, Room
 from .forms import AddWorkerForm, ChangeStatusForm
-
+from schedule.views import CreateEventView
+from .forms import AddEventForm
 def register(request):
     if request.method == "POST":
         form = AddWorkerForm(request.POST)
@@ -178,3 +179,6 @@ def rooms_list(request):
 
         }
     )
+
+class CustomCreateEventView(CreateEventView):
+    form_class = AddEventForm
