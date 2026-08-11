@@ -13,6 +13,7 @@ from .forms import AddEventForm
 from schedule.views import DeleteEventView
 from django.shortcuts import redirect
 from schedule.views import EditEventView
+
 def register(request):
     if request.method == "POST":
         form = AddWorkerForm(request.POST)
@@ -123,6 +124,7 @@ def change_worker_status(request, pk):
         },
     )
 
+@login_required
 def show_absence_details(request,pk):
     worker = get_object_or_404(Worker, pk=pk)
     start=worker.start_of_absence
