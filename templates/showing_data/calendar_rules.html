@@ -77,15 +77,19 @@
 
                 <button type="submit"
                         class="btn btn-primary">
+                    <i class="bi-check2-circle"></i>
                     Apply
                 </button>
 
                 <a href="{% url 'availability:rules_list' %}"
                    class="btn btn-outline-secondary">
+                    <i class="bi-eraser-fill"></i>
                     Clear
                 </a>
                 {% if user.is_authenticated and user.is_superuser %}
-                <a href="/admin/schedule/rule/add/" class="btn btn-outline-warning">Add Rule</a>
+                <a href="/admin/schedule/rule/add/" class="btn btn-outline-warning">
+                <i class="bi-gear"></i>
+                    Add Rule</a>
                 {% endif %}
 
             </div>
