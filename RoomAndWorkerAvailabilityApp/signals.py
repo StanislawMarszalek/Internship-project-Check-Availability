@@ -17,9 +17,7 @@ def create_room_calendar(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Room)
 def delete_room_calendar(sender, instance, **kwargs):
-    try:
-        calendar = Calendar.objects.get_calendar_for_object(instance)
-    except Calendar.DoesNotExist:
-        return
+    calendars = Calendar.objects.get_calendars_for_object(instance)
 
-    calendar.delete()
+    for calendar in calendars:
+        calendar.delete()
