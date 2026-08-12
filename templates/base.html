@@ -46,18 +46,29 @@
 
                 <span class="text-muted">
                     Logged as: <strong>{{ user.username }}</strong>
+                    {% if user.is_present %}
+                        <i class="bi bi-circle-fill text-success"></i>
+                        {% else %}
+                        <i class="bi bi-circle-fill text-danger"></i>
+                    {% endif %}
                 </span>
 
                 <a
                     class="btn btn-info"
                     href="{% url 'availability:confirm_worker_status' user.pk %}"
                 >
+                    {% if user.is_present %}
+                        <i class="bi bi-toggle2-on"></i>
+                        {% else %}
+                        <i class="bi bi-toggle2-off"></i>
+                    {% endif %}
                     Change status
                 </a>
 
                 <form method="post" action="{% url 'logout' %}" class="d-inline">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-danger">
+                        <i class="bi bi-box-arrow-right"></i>
                         Logout
                     </button>
                 </form>
