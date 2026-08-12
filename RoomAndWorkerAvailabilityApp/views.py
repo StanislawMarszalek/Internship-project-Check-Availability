@@ -149,7 +149,7 @@ def show_absence_details(request,pk):
 @login_required
 def rooms_list(request):
 
-    room_number_query = request.GET.get("room_number", "").strip()
+    room_number_query = request.GET.get("id", "").strip()
     room_name_query = request.GET.get("room_name", "").strip()
     room_floor_query = request.GET.get("room_floor", "").strip()
     additional_room_info_query = request.GET.get("additional_room_info", "").strip()
@@ -159,7 +159,7 @@ def rooms_list(request):
     rooms = Room.objects.all()
 
     if room_number_query:
-        rooms = rooms.filter(room_number=room_number_query)
+        rooms = rooms.filter(id=room_number_query)
 
     if room_name_query:
         rooms = rooms.filter(room_name__icontains=room_name_query)
@@ -174,9 +174,9 @@ def rooms_list(request):
         rooms = rooms.filter(building_name__icontains=building_name_query)
 
     if sort_query == "name_desc":
-        rooms = rooms.order_by("-room_number", "-room_name")
+        rooms = rooms.order_by("-id", "-room_name")
     else:
-        rooms = rooms.order_by("room_number", "room_name")
+        rooms = rooms.order_by("id", "room_name")
 
     return render(
         request,
