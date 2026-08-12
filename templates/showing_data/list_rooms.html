@@ -96,6 +96,14 @@
                         <td>{{ room.additional_room_info|default:"-" }}</td>
                         <td>{{ room.building_name|default:"-" }}</td>
                         <td>
+                            {% with room_id=room.pk|stringformat:"s" %}
+                                {% with calendar_slug="room-"|add:room_id %}
+                                    <a class="btn btn-info"
+                                       href="{% url 'my_fullcalendar' calendar_slug %}">
+                                        Calendar
+                                    </a>
+                                {% endwith %}
+                            {% endwith %}
                             {% if user.is_authenticated and user.is_superuser %}
                                 <a class="btn btn-sm btn-warning"
                                    href="{% url 'admin:RoomAndWorkerAvailabilityApp_room_change' room.pk %}">
