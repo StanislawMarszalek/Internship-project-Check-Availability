@@ -13,7 +13,7 @@ class Room(models.Model):
     """
     Class to model the Room
     Attributes:
-        room_number (int): Room number which is PK
+        id (int): Room number which is PK
         room_floor (int): Room floor
         room_name (str): Room name
         additional_room_info (str): Additional room info
@@ -26,8 +26,10 @@ class Room(models.Model):
         (1, 1),
         (2, 2),
     ]
-    room_number = models.PositiveIntegerField(primary_key=True,default=1,
-                                              verbose_name=gettext_lazy('Room number'))
+    #Change room_number to 'id' to satisfy 'django-scheduler' requirments
+
+    id = models.PositiveIntegerField(primary_key=True, default=1,
+                                     verbose_name=gettext_lazy('Room number'))
 
     room_floor = models.PositiveIntegerField(default=0,
                                              validators=[MaxValueValidator(2)],
@@ -51,7 +53,7 @@ class Room(models.Model):
         verbose_name_plural = gettext_lazy('Rooms')
 
     def __str__(self):
-        return (f"{gettext_lazy('Room number')}: {self.room_number}\n"
+        return (f"{gettext_lazy('Room number')}: {self.id}\n"
                 f"{gettext_lazy('Floor')} {self.room_floor}"
                 f"{f"\n Nazwa sali: {self.room_name}" if self.room_name else ""}")
 
