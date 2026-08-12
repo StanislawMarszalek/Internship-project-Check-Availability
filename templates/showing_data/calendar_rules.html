@@ -73,6 +73,17 @@
                     placeholder="Filter by frequency">
             </div>
 
+            <div class="col-md-2">
+                <select name="sort" class="form-select">
+                    <option value="name_asc" {% if sort_query == "name_asc" %}selected{% endif %}>
+                        Name A-Z
+                    </option>
+                    <option value="name_desc" {% if sort_query == "name_desc" %}selected{% endif %}>
+                        Name Z-A
+                    </option>
+                </select>
+            </div>
+
             <div class="col-md-2 d-flex gap-2">
 
                 <button type="submit"
