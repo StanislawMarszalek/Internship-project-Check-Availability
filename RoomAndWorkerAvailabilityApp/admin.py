@@ -16,7 +16,7 @@ class RoomAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue=None):
         messages.success(
             request,
-            f"Room {obj.room_number} was successfully added."
+            f"Room {obj.id} was successfully added."
         )
 
         if "_continue" in request.POST:
@@ -35,7 +35,7 @@ class RoomAdmin(admin.ModelAdmin):
     def response_change(self, request, obj):
         messages.success(
             request,
-            f"Room {obj.room_number} was successfully updated."
+            f"Room {obj.id} was successfully updated."
         )
 
         if "_continue" in request.POST:
