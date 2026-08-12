@@ -105,7 +105,7 @@ class AddEventForm(forms.ModelForm):
 
         if start and end and end <= start:
             raise forms.ValidationError(
-                "Data zakończenia musi być późniejsza niż data rozpoczęcia."
+                "The start must be less than the end date."
             )
 
         return cleaned_data
