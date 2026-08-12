@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.http import HttpResponseForbidden
 from django.views.generic import TemplateView
-from schedule.models import Event, Calendar
+from schedule.models import Event, Calendar, Rule
 
 from .models import Worker, Room
 from .forms import AddWorkerForm, ChangeStatusForm
@@ -269,3 +269,18 @@ class MyFullCalendarView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context["calendar_slug"] = self.kwargs["calendar_slug"]
         return context
+
+@login_required
+def rules_list(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden(
+            "You are not the user or the admin"
+        )
+    rules = Rule.objects.all()
+    return render(
+        request,
+        template_name="showing_data/calendar_rules.html",
+        context={
+            "rules":rules,
+        }
+    )
