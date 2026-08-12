@@ -226,7 +226,7 @@ class CustomDeleteEventView(LoginRequiredMixin, DeleteEventView):
 
     def dispatch(self,request,*args,**kwargs):
         self.object = self.get_object()
-        if self.object.creator != request.user:
+        if self.object.creator != request.user and not request.user.is_superuser:
             raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
@@ -252,7 +252,7 @@ class CustomEditEventView(LoginRequiredMixin, EditEventView):
 
     def dispatch(self,request,*args,**kwargs):
         self.object = self.get_object()
-        if self.object.creator != request.user:
+        if self.object.creator != request.user and not request.user.is_superuser:
             raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
