@@ -53,9 +53,8 @@ class Room(models.Model):
         verbose_name_plural = gettext_lazy('Rooms')
 
     def __str__(self):
-        return (f"{gettext_lazy('Room number')}: {self.id}\n"
-                f"{gettext_lazy('Floor')} {self.room_floor}"
-                f"{f"\n Nazwa sali: {self.room_name}" if self.room_name else ""}")
+        return (f"Room number: {self.id}  Floor: {self.room_floor} "
+                f"Room name: {self.room_name if self.room_name else "" }")
 
 
 
