@@ -281,6 +281,7 @@ def rules_list(request):
     name_query=request.GET.get("name", "").strip()
     description_query=request.GET.get("description", "").strip()
     frequency_query=request.GET.get("frequency", "").strip()
+    sort_query = request.GET.get("sort", "name_asc").strip()
 
     if name_query:
         rules = rules.filter(name__icontains=name_query)
@@ -288,6 +289,11 @@ def rules_list(request):
         rules = rules.filter(description__icontains=description_query)
     if frequency_query:
         rules = rules.filter(frequency__icontains=frequency_query)
+
+    if sort_query == "name_desc":
+        rules = rules.order_by("-name", "-frequency")
+    else:
+        rules = rules.order_by("name", "frequency")
 
     return render(
         request,
@@ -297,5 +303,6 @@ def rules_list(request):
             "name_query":name_query,
             "description_query":description_query,
             "frequency_query":frequency_query,
+            "sort_query":sort_query
         }
     )
