@@ -28,7 +28,7 @@ def register(request):
 
             login(request, user)
 
-            return redirect("availability:worker_list")
+            return redirect("availability:workers_list")
 
     else:
         form = AddWorkerForm()
