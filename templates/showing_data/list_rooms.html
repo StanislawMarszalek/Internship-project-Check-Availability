@@ -90,7 +90,7 @@
                 <tbody>
                     {% for room in rooms %}
                     <tr>
-                        <td>{{ room.room_number }}</td>
+                        <td>{{ room.id }}</td>
                         <td>{{ room.room_floor }}</td>
                         <td>{{ room.room_name|default:"-" }}</td>
                         <td>{{ room.additional_room_info|default:"-" }}</td>
