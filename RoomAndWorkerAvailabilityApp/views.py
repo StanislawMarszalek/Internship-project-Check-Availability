@@ -214,7 +214,7 @@ class CustomCreateEventView(LoginRequiredMixin, CreateEventView):
         if overlapping_events.exists():
             form.add_error(
                 None,
-                "Wybrany termin nachodzi na istniejący event."
+                "Events cannot overlap."
             )
             return self.form_invalid(form)
 
