@@ -274,13 +274,28 @@ class MyFullCalendarView(LoginRequiredMixin, TemplateView):
 def rules_list(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden(
-            "You are not the user or the admin"
+            "You are the admin"
         )
     rules = Rule.objects.all()
+
+    name_query=request.GET.get("name", "").strip()
+    description_query=request.GET.get("description", "").strip()
+    frequency_query=request.GET.get("frequency", "").strip()
+
+    if name_query:
+        rules = rules.filter(name__icontains=name_query)
+    if description_query:
+        rules = rules.filter(description__icontains=description_query)
+    if frequency_query:
+        rules = rules.filter(frequency__icontains=frequency_query)
+
     return render(
         request,
         template_name="showing_data/calendar_rules.html",
         context={
             "rules":rules,
+            "name_query":name_query,
+            "description_query":description_query,
+            "frequency_query":frequency_query,
         }
     )
