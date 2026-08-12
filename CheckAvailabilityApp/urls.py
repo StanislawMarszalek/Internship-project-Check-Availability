@@ -43,7 +43,5 @@ urlpatterns = [
             views.MyFullCalendarView.as_view(),
             name="my_fullcalendar",
         ),
-
-path("schedule/", include("schedule.urls")),
     path('schedule/', include('schedule.urls')),
 ]
