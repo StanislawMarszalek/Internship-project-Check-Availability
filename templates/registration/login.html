@@ -3,24 +3,44 @@
 {% block content %}
 <div class="card shadow-sm">
     <div class="card-body">
-
-        <h2 class="h5 mb-3">Login</h2>
-
-        <form method="post">
-            {% csrf_token %}
-
-            {{ form.as_p }}
-
+        {% if user.is_authenticated %}
+            <h1 class="h3 mb-1">You are already logged in</h1>
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-outline-primary">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    Login</button>
+                <a class="btn btn-outline-primary" href="{% url 'availability:workers_list' %}">
+                    <i class="bi-person-fill"></i>
+                    Workers
+                </a>
 
-                <a href="{% url 'password_reset' %}" class="btn btn-outline-warning">
-                    <i class="bi bi-key"></i>
-                    Forgot password?</a>
+                <a class="btn btn-outline-primary" href="{% url 'availability:rooms_list' %}">
+                    <i class="bi-door-open-fill"></i>
+                    Rooms
+                </a>
+                {% if user.is_superuser %}
+                   <a class="btn btn-outline-primary" href="{% url 'availability:rules_list' %}">
+                       <i class="bi-gear"></i>
+                       Rules
+                   </a>
+                {% endif %}
             </div>
-        </form>
+        {% else %}
+            <h2 class="h5 mb-3">Login</h2>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Login</button>
+
+                    <a href="{% url 'password_reset' %}" class="btn btn-outline-warning">
+                        <i class="bi bi-key"></i>
+                        Forgot password?</a>
+                </div>
+            </form>
+        {% endif %}
 
     </div>
 </div>
