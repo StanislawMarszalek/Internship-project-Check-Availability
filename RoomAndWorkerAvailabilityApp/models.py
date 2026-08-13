@@ -65,8 +65,6 @@ class Worker(AbstractUser):
     Class to model the Worker
     Attributes:
         username (string): Username
-        first_name (string): First name
-        last_name (string): Last name
         email (string): Email
         password (string): Password to login
         department (string): Department
@@ -110,8 +108,6 @@ class Worker(AbstractUser):
                                      verbose_name=gettext_lazy('Date of creation'))
 
     REQUIRED_FIELDS = [
-        "first_name",
-        "last_name",
         "email",
         "department",
         "position",
@@ -120,7 +116,7 @@ class Worker(AbstractUser):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["first_name", "last_name", "department"],
+                fields=["username"],
                 name="unique_worker"
             )
         ]
