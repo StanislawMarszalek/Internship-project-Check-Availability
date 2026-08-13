@@ -78,34 +78,30 @@ def register(request):
 @login_required
 def worker_list(request):
 
-    first_name_query = request.GET.get("first_name", "").strip()
-    last_name_query = request.GET.get("last_name", "").strip()
+    username_query=request.GET.get("username", "").strip()
     departments_query=request.GET.get("department", "").strip()
     positions_query=request.GET.get("position", "").strip()
     sort_query = request.GET.get("sort", "name_asc").strip()
 
     workers = Worker.objects.all()
 
-    if first_name_query:
-        workers = workers.filter(first_name__icontains=first_name_query)
-    if last_name_query:
-        workers = workers.filter(last_name__icontains=last_name_query)
+    if username_query:
+        workers=workers.filter(username__icontains=username_query)
     if departments_query:
         workers = workers.filter(department=departments_query)
     if positions_query:
         workers = workers.filter(position=positions_query)
     if sort_query == "name_desc":
-        workers = workers.order_by("-first_name", "-last_name")
+        workers = workers.order_by("-username", "-position","-is_present")
     else:
-        workers = workers.order_by("first_name", "last_name")
+        workers = workers.order_by("username", "position","is_present")
 
     return render(
         request,
       "showing_data/list_workers.html",
       {
        "workers": workers,
-       "first_name_query": first_name_query,
-       "last_name_query": last_name_query,
+        "username_query":username_query,
        "departments_query": departments_query,
        "positions_query": positions_query,
        "sort_query": sort_query,
