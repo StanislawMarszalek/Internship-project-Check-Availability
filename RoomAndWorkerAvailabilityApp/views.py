@@ -96,7 +96,7 @@ def change_worker_status(request, pk):
     worker = get_object_or_404(Worker, pk=pk)
     if worker.username != request.user.username and not request.user.is_staff:
         return HttpResponseForbidden(
-            "You are not the user or the admin"
+            "You are NOT the user or the admin"
         )
 
     if not worker.is_present:
@@ -274,7 +274,7 @@ class MyFullCalendarView(LoginRequiredMixin, TemplateView):
 def rules_list(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden(
-            "You are the admin"
+            "You are NOT the admin"
         )
     rules = Rule.objects.all()
 
