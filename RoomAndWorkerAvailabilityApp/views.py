@@ -229,6 +229,21 @@ def rooms_list(request):
         }
     )
 
+@login_required
+def show_room_add_info(request,pk):
+    room = get_object_or_404(Room, pk=pk)
+    room_number=room.id
+    room_description=room.additional_room_info if room.additional_room_info else "No additional info"
+    return render(
+        request,
+        "showing_data/additional_info.html",
+        context={
+            "room_number": room_number ,
+            "room_description": room_description,
+        }
+    )
+
+
 class CustomCreateEventView(LoginRequiredMixin, CreateEventView):
     form_class = AddEventForm
 
