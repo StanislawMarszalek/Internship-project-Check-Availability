@@ -33,13 +33,8 @@
         {% endif %}
         <form method="get" class="row g-2 mb-3">
             <div class="col-md-3">
-                <input type="text" name="first_name" value="{{ first_name_query }}" class="form-control"
-                    placeholder="Filter by first name">
-            </div>
-
-            <div class="col-md-3">
-                <input type="text" name="last_name" value="{{ last_name_query }}" class="form-control"
-                    placeholder="Filter by last name">
+                <input type="text" name="username" value="{{ username_query }}" class="form-control"
+                    placeholder="Filter by username">
             </div>
 
             <div class="col-md-2">
@@ -90,8 +85,7 @@
             <table class="table table-striped align-middle">
                 <thead>
                     <tr>
-                        <th>First name</th>
-                        <th>Last name</th>
+                        <th>Username</th>
                         <th>Position</th>
                         <th>Department</th>
                         <th>Present</th>
@@ -103,8 +97,7 @@
                 <tbody>
                     {% for worker in workers %}
                     <tr>
-                        <td>{{ worker.first_name }}</td>
-                        <td>{{ worker.last_name }}</td>
+                        <td>{{ worker.username }}</td>
                         <td>{{ worker.position }}</td>
                         <td>{{ worker.department }}</td>
                         {% if worker.is_present %}
