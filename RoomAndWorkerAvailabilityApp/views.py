@@ -113,7 +113,10 @@ def worker_list(request):
 @login_required
 def confirm_worker_status(request, pk):
     worker = get_object_or_404(Worker, pk=pk)
-
+    if worker.username != request.user.username :
+        return HttpResponseForbidden(
+            "You are NOT the user"
+        )
     return render(
         request,
         "modify_worker/confirm_change_status.html",
