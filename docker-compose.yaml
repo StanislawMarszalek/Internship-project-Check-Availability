@@ -1,0 +1,13 @@
+services:
+  app:
+    image: check_availability_app:latest
+    container_name: check_availability_container
+    ports:
+      - "127.0.0.1:8000:8000"
+    working_dir: /usr/checkAvailability
+    volumes:
+      - type: bind
+        source: "..\\data.sqlite3"
+        target: /usr/checkAvailability/db.sqlite3
+    environment:
+      - secret_key_check_availability=${secret_key_check_availability}
