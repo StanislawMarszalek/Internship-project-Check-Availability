@@ -7,7 +7,11 @@ services:
     working_dir: /usr/checkAvailability
     volumes:
       - type: bind
-        source: "..\\data.sqlite3"
+        source: ./../data.sqlite3
         target: /usr/checkAvailability/db.sqlite3
+      - type: bind
+        source: ./.venv/Lib/site-packages/schedule
+        target: /usr/local/lib/python3.14/site-packages/schedule
     environment:
       - secret_key_check_availability=${secret_key_check_availability}
+
