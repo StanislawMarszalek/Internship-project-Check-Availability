@@ -51,6 +51,9 @@ from .forms import AddWorkerForm, ChangeStatusForm, AddEventForm
 
 
 def register(request):
+    """
+    View to register a new user, after correct registration it redirects user to worker list
+    """
     if request.method == "POST":
         form = AddWorkerForm(request.POST)
 
@@ -72,6 +75,9 @@ def register(request):
 
 @login_required
 def worker_list(request):
+    """
+    View to render worker list with given filters
+    """
 
     username_query=request.GET.get("username", "").strip()
     departments_query=request.GET.get("department", "").strip()
@@ -80,6 +86,7 @@ def worker_list(request):
 
     workers = Worker.objects.all()
 
+    #Applying filters
     if username_query:
         workers=workers.filter(username__icontains=username_query)
     if departments_query:
@@ -107,6 +114,12 @@ def worker_list(request):
 
 @login_required
 def confirm_worker_status(request, pk):
+    """
+    View to confirm will to change worker status
+    If everything is correct it render page to confirm will of change if request user is not
+    the worker the view displays 'You are NOT the user'
+
+    """
     worker = get_object_or_404(Worker, pk=pk)
     if worker.username != request.user.username :
         return HttpResponseForbidden(
@@ -123,6 +136,12 @@ def confirm_worker_status(request, pk):
 
 @login_required
 def change_worker_status(request, pk):
+    """
+    View to change the status
+    if request user is not the worker the view displays 'You are NOT the user'
+    If everything is correct the view render form to chage status or chage it automatically
+    if the worker is absence
+    """
     worker = get_object_or_404(Worker, pk=pk)
     if worker.username != request.user.username :
         return HttpResponseForbidden(
@@ -161,6 +180,9 @@ def change_worker_status(request, pk):
 
 @login_required
 def show_absence_details(request,pk):
+    """
+    View to render absence details of a worker
+    """
     worker = get_object_or_404(Worker, pk=pk)
     start=worker.start_of_absence
     end=worker.end_of_absence
@@ -178,6 +200,9 @@ def show_absence_details(request,pk):
 
 @login_required
 def rooms_list(request):
+    """
+    View to render the list of rooms with given filters
+    """
 
     room_number_query = request.GET.get("id", "").strip()
     room_name_query = request.GET.get("room_name", "").strip()
@@ -188,6 +213,7 @@ def rooms_list(request):
 
     rooms = Room.objects.all()
 
+    # Applying filters
     if room_number_query:
         rooms = rooms.filter(id=room_number_query)
 
@@ -225,6 +251,9 @@ def rooms_list(request):
 
 @login_required
 def show_room_add_info(request,pk):
+    """
+    View to render additional information about the room
+    """
     room = get_object_or_404(Room, pk=pk)
     room_number=room.id
     room_description=room.additional_room_info if room.additional_room_info else "No additional info"
@@ -237,92 +266,19 @@ def show_room_add_info(request,pk):
         }
     )
 
-
-class CustomCreateEventView(LoginRequiredMixin, CreateEventView):
-    form_class = AddEventForm
-
-    def form_valid(self, form):
-
-        calendar = Calendar.objects.get(
-            slug=self.kwargs["calendar_slug"]
-        )
-
-        start = form.cleaned_data["start"]
-        end = form.cleaned_data["end"]
-
-        overlapping_events = Event.objects.filter(
-            calendar=calendar,
-            start__lt=end,
-            end__gt=start,
-        )
-
-        if overlapping_events.exists():
-            form.add_error(
-                None,
-                "Events cannot overlap."
-            )
-            return self.form_invalid(form)
-
-        form.instance.calendar = calendar
-
-        return super().form_valid(form)
-
-class CustomDeleteEventView(LoginRequiredMixin, DeleteEventView):
-
-    def dispatch(self,request,*args,**kwargs):
-        self.object = self.get_object()
-        if self.object.creator != request.user and not request.user.is_superuser:
-            raise PermissionDenied
-        return super().dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
-        if "cancel" in request.POST:
-            return redirect(
-                "my_fullcalendar",
-                calendar_slug=self.object.calendar.slug
-            )
-        return super().post(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return redirect(
-            "fullcalendar",
-            calendar_slug=self.object.calendar.slug
-        ).url
-
-
-class CustomEditEventView(LoginRequiredMixin, EditEventView):
-    form_class = AddEventForm
-
-    def dispatch(self,request,*args,**kwargs):
-        self.object = self.get_object()
-        if self.object.creator != request.user and not request.user.is_superuser:
-            raise PermissionDenied
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return redirect(
-            "fullcalendar",
-            calendar_slug=self.object.calendar.slug
-        ).url
-
-class MyFullCalendarView(LoginRequiredMixin, TemplateView):
-    template_name = "schedule/fullcalendar.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["calendar_slug"] = self.kwargs["calendar_slug"]
-        return context
-
 @login_required
 def rules_list(request):
+    """
+    View to render rules list with given filters
+    It checks if the request user is admin (only admins have access to that page)
+    """
     if not request.user.is_superuser:
         return HttpResponseForbidden(
             "You are NOT the admin"
         )
     rules = Rule.objects.all()
 
+    # Applying filters
     name_query=request.GET.get("name", "").strip()
     description_query=request.GET.get("description", "").strip()
     frequency_query=request.GET.get("frequency", "").strip()
@@ -351,3 +307,102 @@ def rules_list(request):
             "sort_query":sort_query
         }
     )
+
+
+class CustomCreateEventView(LoginRequiredMixin, CreateEventView):
+    """
+    Class to create and valid events in calendars
+    """
+    # It overrides default function from 'django-schedule' models
+
+    form_class = AddEventForm
+
+    def form_valid(self, form):
+        calendar = Calendar.objects.get(
+            slug=self.kwargs["calendar_slug"]
+        )
+
+        start = form.cleaned_data["start"]
+        end = form.cleaned_data["end"]
+
+        overlapping_events = Event.objects.filter(
+            calendar=calendar,
+            start__lt=end,
+            end__gt=start,
+        )
+        # Looking for overlaping events
+        if overlapping_events.exists():
+            form.add_error(
+                None,
+                "Events cannot overlap."
+            )
+            return self.form_invalid(form)
+
+        form.instance.calendar = calendar
+
+        return super().form_valid(form)
+
+
+class CustomDeleteEventView(LoginRequiredMixin, DeleteEventView):
+    """
+    Class to delete events in calendars
+    """
+
+    # It overrides default function from 'django-schedule' models
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.creator != request.user and not request.user.is_superuser:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if "cancel" in request.POST:
+            return redirect(
+                "my_fullcalendar",
+                calendar_slug=self.object.calendar.slug
+            )
+        return super().post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return redirect(
+            "fullcalendar",
+            calendar_slug=self.object.calendar.slug
+        ).url
+
+
+class CustomEditEventView(LoginRequiredMixin, EditEventView):
+    """
+    Class to edit events in calendars
+    """
+    # It overrides default function from 'django-schedule' models
+
+    form_class = AddEventForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.creator != request.user and not request.user.is_superuser:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return redirect(
+            "fullcalendar",
+            calendar_slug=self.object.calendar.slug
+        ).url
+
+
+class MyFullCalendarView(LoginRequiredMixin, TemplateView):
+    """
+    Class to render the full calendar view
+    """
+    # It overrides default function from 'django-schedule' models
+
+    template_name = "schedule/fullcalendar.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["calendar_slug"] = self.kwargs["calendar_slug"]
+        return context
