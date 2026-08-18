@@ -126,9 +126,9 @@ def confirm_worker_status(request, pk):
 @login_required
 def change_worker_status(request, pk):
     worker = get_object_or_404(Worker, pk=pk)
-    if worker.username != request.user.username and not request.user.is_staff:
+    if worker.username != request.user.username :
         return HttpResponseForbidden(
-            "You are NOT the user or the admin"
+            "You are NOT the user"
         )
 
     if not worker.is_present:
