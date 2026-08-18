@@ -33,27 +33,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ### https://github.com/llazzaro/django-scheduler?tab=BSD-3-Clause-1-ov-file
 
 
-
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render, redirect
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+
 from django.http import HttpResponseForbidden
 from django.views.generic import TemplateView
+
+from schedule.views import CreateEventView, DeleteEventView, EditEventView
 from schedule.models import Event, Calendar, Rule
 
 from .models import Worker, Room
-from .forms import AddWorkerForm, ChangeStatusForm
-from schedule.views import CreateEventView
-from .forms import AddEventForm
+from .forms import AddWorkerForm, ChangeStatusForm, AddEventForm
 
-from schedule.views import DeleteEventView
-from django.shortcuts import redirect
-from schedule.views import EditEventView
-
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-#TODO uporzadkowac wszedzie importy
 
 def register(request):
     if request.method == "POST":
