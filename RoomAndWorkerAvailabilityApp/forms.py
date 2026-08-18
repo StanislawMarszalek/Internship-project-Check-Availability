@@ -41,22 +41,23 @@ class ChangeStatusForm(forms.ModelForm):
                 "Start date of absence is required."
             )
 
+        #If a worker is absence there must be the start date,the end date and the reason of its absence
         if not end:
             self.add_error(
                 "end_of_absence",
                 "End date of absence is required."
+            )
+        #Start of the absence must be earlier than the end
+        if start and end and start > end:
+            self.add_error(
+                "end_of_absence",
+                "End date cannot be earlier than start date."
             )
 
         if not reason or not reason.strip():
             self.add_error(
                 "reason_of_absence",
                 "Reason for absence is required."
-            )
-
-        if start and end and start > end:
-            self.add_error(
-                "end_of_absence",
-                "End date cannot be earlier than start date."
             )
 
         return cleaned_data
