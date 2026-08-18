@@ -1,21 +1,22 @@
 
-from django.contrib import admin
-from schedule.models import Rule
-
 from .models import Room, Worker
 
-# Register your models here.
+from schedule.models import Rule
+from schedule.admin import RuleAdmin as SchedulerRuleAdmin
 
 from django.contrib import admin, messages
 from django.shortcuts import redirect
 
-from .models import Room, Worker
-from schedule.admin import RuleAdmin as SchedulerRuleAdmin
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-
+    """
+    Class to provide reactions for responses for CRUD operations on Room model
+    """
     def response_add(self, request, obj, post_url_continue=None):
+        """
+        Function to add Room and redirect Admin depending on the request
+        """
         messages.success(
             request,
             f"Room {obj.id} was successfully added."
@@ -35,6 +36,9 @@ class RoomAdmin(admin.ModelAdmin):
         return redirect("availability:rooms_list")
 
     def response_change(self, request, obj):
+        """
+        Function to change Room and redirect Admin depending on the request
+        """
         messages.success(
             request,
             f"Room {obj.id} was successfully updated."
@@ -53,6 +57,9 @@ class RoomAdmin(admin.ModelAdmin):
         return redirect("availability:rooms_list")
 
     def response_delete(self, request, obj_display, obj_id):
+        """
+        Function to delete Room and redirect Admin to room list
+        """
         messages.success(
             request,
             f"Room {obj_display} was successfully deleted."
@@ -62,8 +69,13 @@ class RoomAdmin(admin.ModelAdmin):
 
 @admin.register(Worker)
 class WorkerAdmin(admin.ModelAdmin):
-
+    """
+    Class to provide reactions for responses for CRUD operations on Worker model
+    """
     def response_add(self, request, obj, post_url_continue=None):
+        """
+        Function to add Worker and redirect Admin depending on the request
+        """
         messages.success(
             request,
             f"Worker {obj.first_name} {obj.last_name} was successfully added."
@@ -83,6 +95,9 @@ class WorkerAdmin(admin.ModelAdmin):
         return redirect("availability:workers_list")
 
     def response_change(self, request, obj):
+        """
+        Function to change Worker and redirect Admin depending on the request
+        """
         messages.success(
             request,
             f"Worker {obj.first_name} {obj.last_name} was successfully updated."
@@ -102,6 +117,9 @@ class WorkerAdmin(admin.ModelAdmin):
         return redirect("availability:workers_list")
 
     def response_delete(self, request, obj_display, obj_id):
+        """
+        Function to delete Worker and redirect Admin to worker list
+        """
         messages.success(
             request,
             f"Worker {obj_display} was successfully deleted."
@@ -114,8 +132,13 @@ class WorkerAdmin(admin.ModelAdmin):
 admin.site.unregister(Rule)
 @admin.register(Rule)
 class RuleAdmin(SchedulerRuleAdmin):
-
+    """
+    Class to provide reactions for responses for CRUD operations on Rule model
+    """
     def response_add(self, request, obj, post_url_continue=None):
+        """
+        Function to add Rule and redirect Admin depending on the request
+        """
         messages.success(
             request,
             f"Rule {obj.name} was successfully added."
@@ -137,6 +160,9 @@ class RuleAdmin(SchedulerRuleAdmin):
         )
 
     def response_change(self, request, obj):
+        """
+        Function to change Rule and redirect Admin depending on the request
+        """
         messages.success(
             request,
             f"Rule {obj.name} was successfully updated."
@@ -158,6 +184,9 @@ class RuleAdmin(SchedulerRuleAdmin):
         )
 
     def response_delete(self, request, obj_display, obj_id):
+        """
+        Function to delete Rule and redirect Admin to rule list
+        """
         messages.success(
             request,
             f"Rule {obj_display} was successfully deleted."
