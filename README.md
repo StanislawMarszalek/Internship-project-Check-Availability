@@ -2,6 +2,9 @@
 
 A Django web application for managing and checking the availability of rooms and workers.
 
+## Link to calendar repository
+[django-scheduler](https://github.com/llazzaro/django-scheduler)
+
 ## Features
 
 - User registration, login and password reset
